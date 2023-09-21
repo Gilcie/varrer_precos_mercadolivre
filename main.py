@@ -45,7 +45,7 @@ while True:
     for titulo, link, preco in zip(titulos, links, precos):
         with open('preco.csv', 'a', encoding='utf-8', newline='') as arquivo:
             link_processado = link.get_attribute('href')
-            arquivo.write(f'{titulo.text};{preco.text};{link_processado}{os.linesep}')
+            arquivo.write(f'{titulo.text};R${preco.text},00;{link_processado}{os.linesep}')
     # Fazer isso para todas as páginas
     try:
         botao_seguinte = driver.find_element(
@@ -56,7 +56,6 @@ while True:
     # Após o término da automação, exiba a caixa de diálogo
         messagebox.showinfo('Fim', 'Chegamos na última página, Automação finalizada com sucesso!')
         break
-
-input('Pressione ENTER para sair')
-driver.quit()
+        input('Pressione ENTER para sair')
+        driver.quit()
 
