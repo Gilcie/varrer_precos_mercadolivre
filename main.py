@@ -41,11 +41,12 @@ while True:
     titulos = driver.find_elements(By.XPATH, "//*[@class='ui-search-item__group ui-search-item__group--title shops__items-group']//h2")
     links = driver.find_elements(By.XPATH, "//*[@class='ui-search-item__group ui-search-item__group--title shops__items-group']//a")
     precos = driver.find_elements(By.XPATH, "//div[@class='ui-search-price ui-search-price--size-medium shops__price']//span[@class='andes-money-amount ui-search-price__part shops__price-part ui-search-price__part--medium andes-money-amount--cents-superscript']//span[@class='andes-money-amount__fraction']")
+    centavos = driver.find_elements(By.XPATH, "//div[@class='ui-search-price ui-search-price--size-medium shops__price']//span[@class='andes-money-amount ui-search-price__part shops__price-part ui-search-price__part--medium andes-money-amount--cents-superscript']//span[@class='andes-money-amount__cents andes-money-amount__cents--superscript-24']")
     # Guardar em um arquivo CSV
-    for titulo, link, preco in zip(titulos, links, precos):
+    for titulo, link, preco, centavo in zip(titulos, links, precos, centavos):
         with open('preco.csv', 'a', encoding='utf-8', newline='') as arquivo:
             link_processado = link.get_attribute('href')
-            arquivo.write(f'{titulo.text};R${preco.text},00;{link_processado}{os.linesep}')
+            arquivo.write(f'{titulo.text};R${preco.text},{centavo.text};{link_processado}{os.linesep}')
     # Fazer isso para todas as páginas
     try:
         botao_seguinte = driver.find_element(
