@@ -3,7 +3,6 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-import tkinter as tk
 from tkinter import messagebox
 
 
@@ -14,7 +13,6 @@ def start_driver():
     for argument in arguments:
         chrome_options.add_argument(argument)
 
-    # Configurações experimentais
     chrome_options.add_experimental_option('prefs', {
         # Desabilita a confirmação de download
         'download.prompt_for_download': False,
@@ -31,10 +29,9 @@ def start_driver():
 
 # Inicializando o driver
 driver = start_driver()
-driver.get('https://lista.mercadolivre.com.br/informatica/armazenamento/discos-acessorios/hds-ssds/ssd_Frete_Full_NoIndex_True#applied_filter_id%3Dshipping_highlighted_fulfillment%26applied_filter_name%3DTipo+de+envio%26applied_filter_order%3D1%26applied_value_id%3Dfulfillment%26applied_value_name%3DFull%26applied_value_order%3D1%26applied_value_results%3D2552%26is_custom%3Dfalse')
+driver.get('') ## <- Faça a pesquisa do produto deejado no site do mercado livre e cole o link aqui
 while True:
     sleep(5)
-    # Carregar todos elementos da tela movendo até o final da página
     driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
     sleep(2)
     # Pegar todos os elementos da tela
@@ -43,19 +40,18 @@ while True:
     precos = driver.find_elements(By.XPATH, "//div[@class='ui-search-price ui-search-price--size-medium shops__price']//span[@class='andes-money-amount ui-search-price__part shops__price-part ui-search-price__part--medium andes-money-amount--cents-superscript']//span[@class='andes-money-amount__fraction']")
     # Guardar em um arquivo CSV
     for titulo, link, preco in zip(titulos, links, precos):
-        with open('preco.csv', 'a', encoding='utf-8', newline='') as arquivo:
+        with open('precos.csv', 'a', encoding='utf-8', newline='') as arquivo:
             link_processado = link.get_attribute('href')
             arquivo.write(f'{titulo.text};R${preco.text},00;{link_processado}{os.linesep}')
-    # Fazer isso para todas as páginas
     try:
         botao_seguinte = driver.find_element(
             By.XPATH, "//*[@class='andes-pagination__button andes-pagination__button--next shops__pagination-button']/a")
         sleep(2)
         botao_seguinte.click()
     except:
-    # Após o término da automação, exiba a caixa de diálogo
         messagebox.showinfo('Fim', 'Chegamos na última página, Automação finalizada com sucesso!')
         break
-        input('Pressione ENTER para sair')
-        driver.quit()
+
+input('Pressione ENTER para sair')
+driver.quit()
 
